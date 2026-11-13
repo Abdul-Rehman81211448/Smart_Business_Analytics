@@ -1,27 +1,30 @@
-USE smart_business_db;
+import streamlit as st
+import pandas as pd
 
-CREATE TABLE products (
-    product_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name VARCHAR(100) NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
-    cost_price DECIMAL(10,2) NOT NULL,
-    stock_quantity INT NOT NULL
-);
+st.title("Smart Business Analytics Dashboard")
+st.write("Welcome Abdul-Rehman! Your business analytics dashboard is now live.")
 
-CREATE TABLE sales (
-    sale_id INT AUTO_INCREMENT PRIMARY KEY,
-    product_id INT,
-    quantity_sold INT NOT NULL,
-    total_amount DECIMAL(10,2) NOT NULL,
-    sale_date DATE NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES products(product_id)
-);
+products_data = {
+    "product_id": [1, 2],
+    "product_name": ["Tea", "Biscuit"],
+    "price": [50.00, 30.00],
+    "stock_quantity": [100, 200]
+}
+df_products = pd.DataFrame(products_data)
 
-INSERT INTO products (product_name, price, cost_price, stock_quantity) 
-VALUES ('Tea', 50.00, 30.00, 100),
-       ('Biscuit', 30.00, 20.00, 200);
+st.subheader("Products Inventory")
+st.dataframe(df_products)
 
-INSERT INTO sales (product_id, quantity_sold, total_amount, sale_date) 
-VALUES (1, 5, 250.00, '2026-11-01'),
-       (2, 10, 300.00, '2026-11-01'),
-       (1, 8, 400.00, '2026-11-02');
+sales_data = {
+    "sale_id": [1, 2, 3],
+    "product_id": [1, 2, 1],
+    "quantity_sold": [5, 10, 8],
+    "total_amount": [250.00, 300.00, 400.00],
+    "sale_date": ["2026-11-01", "2026-11-01", "2026-11-02"]
+}
+df_sales = pd.DataFrame(sales_data)
+
+st.subheader("Sales Performance")
+st.dataframe(df_sales)
+
+st.bar_chart(df_sales.set_index("sale_id")["total_amount"])
