@@ -1,4 +1,3 @@
-DROP DATABASE IF EXISTS smart_business_db;
 CREATE DATABASE smart_business_db;
 USE smart_business_db;
 
