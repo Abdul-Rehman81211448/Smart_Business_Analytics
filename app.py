@@ -1,4 +1,3 @@
-CREATE DATABASE smart_business_db;
 USE smart_business_db;
 
 CREATE TABLE products (
