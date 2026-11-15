@@ -130,15 +130,9 @@ st.download_button(
     data=csv_data,
     file_name="smart_business_report.csv",
     mime="text/csv",
-    st.sidebar.markdown("---")
-st.sidebar.subheader("⚙️ Data Management")
-
-if st.sidebar.button("🔄 Clear All Data"):
+    st.write("---")
+if st.button("Clear All Data"):
     for key in list(st.session_state.keys()):
         del st.session_state[key]
-    st.sidebar.success("All data cleared successfully! Refreshing app.")
+    st.success("All data cleared successfully! Refreshing app.")
     st.rerun()
-)
-
-st.subheader("Current Products Inventory")
-st.dataframe(df_products, use_container_width=True)
