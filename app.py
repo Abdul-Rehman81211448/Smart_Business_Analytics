@@ -126,7 +126,7 @@ st.dataframe(
 # CSV Download Button
 csv_data = filtered_df.to_csv(index=False).encode('utf-8')
 st.download_button()
-    label="📥 Download Filtered Data as CSV",
+label="📥 Download Filtered Data as CSV",
     data=csv_data,
     file_name="smart_business_report.csv",
     mime="text/csv",
