@@ -130,9 +130,12 @@ st.download_button(
     data=csv_data,
     file_name="smart_business_report.csv",
     mime="text/csv",
-    st.write("---")
-if st.button("Clear All Data"):
-    for key in list(st.session_state.keys()):
-        del st.session_state[key]
-    st.success("All data cleared successfully! Refreshing app.")
-    st.rerun()
+   # --- Clear Data Feature ---
+try:
+    if st.button("Clear All Data"):
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
+        st.success("All data cleared successfully! Refreshing.")
+        st.rerun()
+except Exception:
+    pass
