@@ -1,12 +1,16 @@
 
 import streamlit as st
 import pandas as pd
-# --- Custom Store Branding & Professional Header ---
+# --- Dynamic Store Branding & Header ---
+st.sidebar.header("🏪 Store Settings")
+user_store_name = st.sidebar.text_input("Enter Store Name", "Smart Business & Analytics Hub")
+
+# Main Header that updates automatically based on user input
 st.markdown(
-    """
-    <div style="background-color: #f0f2f6; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
-        <h1 style="color: #1f77b4; margin: 0; font-size: 28px;">🏪 Smart Business & Analytics Hub</h1>
-        <p style="color: #555; margin: 5px 0 0 0; font-size: 16px;">Professional POS, Inventory, AI Insights & Udhaar Management System</p>
+    f"""
+    <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 25px; border: 1px solid #d1d5db;">
+        <h1 style="color: #1f77b4; margin: 0; font-size: 32px;">🏪 {user_store_name}</h1>
+        <p style="color: #555; margin: 8px 0 0 0; font-size: 16px;">Professional POS, Inventory, AI Insights & Udhaar Management System</p>
     </div>
     """,
     unsafe_allow_html=True
