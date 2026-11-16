@@ -163,7 +163,7 @@ if not filtered_df.empty:
         st.warning("📊 **AI Trend Alert:** Sales velocity is normal. Introduce promotions to boost customer engagement.")
 else:
     st.warning("⚠️ Please select products in the filter to view AI analytics.")
-# --- Customer Credit Ledger (Udhaar Khata) ---
+# --- Customer Credit Ledger (Udhaar Khata) with Clear Option ---
 st.markdown("---")
 st.subheader("📒 Customer Credit Ledger (Udhaar Khata)")
 
@@ -188,5 +188,11 @@ if st.session_state.credit_data:
     st.dataframe(credit_df, use_container_width=True)
     total_credit = credit_df['Amount'].sum()
     st.info(f"📌 Total Market Udhaar (Pending): **{total_credit:,.2f} PKR**")
+    
+    # Clear / Settlement Button to reset records when paid
+    if st.button("Clear All Credit Records (Settled)"):
+        st.session_state.credit_data = []
+        st.success("All credit records have been cleared successfully!")
+        st.rerun()
 else:
     st.write("No credit records added yet.")
