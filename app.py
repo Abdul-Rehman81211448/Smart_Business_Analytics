@@ -1,15 +1,24 @@
-
 import streamlit as st
 import pandas as pd
-# --- Dynamic Store Branding & Header ---
-st.sidebar.header("🏪 Store Settings")
-user_store_name = st.sidebar.text_input("Enter Store Name", "Smart Business & Analytics Hub")
 
-# Main Header that updates automatically based on user input
+# --- Dynamic Store Name & Reset / Session Settings ---
+st.sidebar.markdown("---")
+st.sidebar.subheader("🏪 Store & Data Management")
+
+# Store Name Input Box (Dynamic)
+dynamic_store_name = st.sidebar.text_input("Enter Store Name", "Smart Business & Analytics Hub")
+
+# Reset / Clear All App Data Button
+if st.sidebar.button("🔄 Reset All Store Data"):
+    st.session_state.clear()
+    st.success("All data and store settings have been reset!")
+    st.rerun()
+
+# Dynamic Professional Header
 st.markdown(
     f"""
     <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 25px; border: 1px solid #d1d5db;">
-        <h1 style="color: #1f77b4; margin: 0; font-size: 32px;">🏪 {user_store_name}</h1>
+        <h1 style="color: #1f77b4; margin: 0; font-size: 32px;">🏪 {dynamic_store_name}</h1>
         <p style="color: #555; margin: 8px 0 0 0; font-size: 16px;">Professional POS, Inventory, AI Insights & Udhaar Management System</p>
     </div>
     """,
