@@ -140,3 +140,26 @@ try:
         st.rerun()
 except Exception:
     pass
+# --- AI Business Insights & Sales Predictor ---
+st.markdown("---")
+st.subheader("🤖 AI Business Insights & Analytics")
+
+if not filtered_df.empty:
+    top_product = filtered_df.groupby('product_name')['quantity_sold'].sum().idxmax()
+    total_rev = filtered_df['total_revenue'].sum()
+    total_prof = filtered_df['profit'].sum()
+    
+    st.info(
+        f"💡 **AI Smart Analysis:** Top performing product is "
+        f"**'{top_product}'**. Total Revenue is **{total_rev:,.2f} PKR** and total profit "
+        f"is **{total_prof:,.2f} PKR**."
+    )
+    
+    st.subheader("🔮 AI Sales & Demand Predictor")
+    avg_sales = filtered_df['quantity_sold'].mean()
+    if avg_sales > 5:
+        st.success("🚀 **AI Trend Alert:** Market demand is high! Consider restocking top-selling items.")
+    else:
+        st.warning("📊 **AI Trend Alert:** Sales velocity is normal. Introduce promotions to boost customer engagement.")
+else:
+    st.warning("⚠️ Please select products in the filter to view AI analytics.")
