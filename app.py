@@ -163,3 +163,30 @@ if not filtered_df.empty:
         st.warning("📊 **AI Trend Alert:** Sales velocity is normal. Introduce promotions to boost customer engagement.")
 else:
     st.warning("⚠️ Please select products in the filter to view AI analytics.")
+# --- Customer Credit Ledger (Udhaar Khata) ---
+st.markdown("---")
+st.subheader("📒 Customer Credit Ledger (Udhaar Khata)")
+
+if 'credit_data' not in st.session_state:
+    st.session_state.credit_data = []
+
+with st.form("credit_form"):
+    col1, col2 = st.columns(2)
+    with col1:
+        cust_name = st.text_input("Customer Name")
+    with col2:
+        credit_amount = st.number_input("Credit Amount (PKR)", min_value=0.0, step=10.0)
+    
+    submit_credit = st.form_submit_button("Add Udhaar Record")
+    if submit_credit and cust_name:
+        st.session_state.credit_data.append({"Customer": cust_name, "Amount": credit_amount})
+        st.success(f"Credit record added successfully for {cust_name}!")
+
+if st.session_state.credit_data:
+    import pandas as pd
+    credit_df = pd.DataFrame(st.session_state.credit_data)
+    st.dataframe(credit_df, use_container_width=True)
+    total_credit = credit_df['Amount'].sum()
+    st.info(f"📌 Total Market Udhaar (Pending): **{total_credit:,.2f} PKR**")
+else:
+    st.write("No credit records added yet.")
