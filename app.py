@@ -1,3 +1,14 @@
+# --- Custom Store Branding & Professional Header ---
+st.markdown(
+    """
+    <div style="background-color: #f0f2f6; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+        <h1 style="color: #1f77b4; margin: 0; font-size: 28px;">🏪 Smart Business & Analytics Hub</h1>
+        <p style="color: #555; margin: 5px 0 0 0; font-size: 16px;">Professional POS, Inventory, AI Insights & Udhaar Management System</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 import streamlit as st
 import pandas as pd
 
