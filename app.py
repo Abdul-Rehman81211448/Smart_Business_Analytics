@@ -1,3 +1,6 @@
+
+import streamlit as st
+import pandas as pd
 # --- Custom Store Branding & Professional Header ---
 st.markdown(
     """
@@ -8,9 +11,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-import streamlit as st
-import pandas as pd
 
 st.set_page_config(page_title="Smart Business Analytics", layout="wide")
 
