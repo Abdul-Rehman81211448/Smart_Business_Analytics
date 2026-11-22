@@ -44,63 +44,189 @@ st.markdown(
 
 
 def default_data():
-    today = datetime.now().strftime("%Y-%m-%d")
     return {
-        "store_name": "Al-Arifeen Store & Khata",
+        "store_name": "Al-Madina Mart & General Store",
         "products": {
-            "Oil Filter": 850.0,
-            "Spark Plug": 600.0,
-            "AC Gas Service": 3500.0,
-            "Battery Terminal": 450.0,
-            "Coolant Bottle": 1200.0,
+            "Basmati Rice 5kg": 1850.0,
+            "Cooking Oil 5L": 2650.0,
+            "Sugar 5kg": 920.0,
+            "Tea Pack 900g": 1540.0,
+            "Washing Powder 3kg": 1150.0,
+            "Dishwash Liquid 1L": 480.0,
+            "Shampoo Bottle": 790.0,
+            "Biscuit Carton": 1400.0,
+            "Mineral Water Crate": 840.0,
+            "Tissue Box Pack": 650.0,
         },
         "transactions": [
             {
-                "Date": today,
-                "Time": "09:30 AM",
+                "Date": "2026-11-21",
+                "Time": "08:45 AM",
                 "Customer": "Walk-in Cash",
-                "Item": "Spark Plug",
+                "Item": "Tea Pack 900g",
                 "Qty": 2,
-                "Unit_Price": 600.0,
-                "Total": 1200.0,
+                "Unit_Price": 1540.0,
+                "Total": 3080.0,
                 "Payment_Type": "Cash",
             },
             {
-                "Date": today,
-                "Time": "11:15 AM",
-                "Customer": "Kamran Traders",
-                "Item": "AC Gas Service",
-                "Qty": 1,
-                "Unit_Price": 3500.0,
-                "Total": 3500.0,
+                "Date": "2026-11-21",
+                "Time": "09:15 AM",
+                "Customer": "Usman General Store",
+                "Item": "Basmati Rice 5kg",
+                "Qty": 5,
+                "Unit_Price": 1850.0,
+                "Total": 9250.0,
                 "Payment_Type": "Udhaar",
             },
             {
-                "Date": today,
-                "Time": "01:40 PM",
-                "Customer": "Bilal Auto",
-                "Item": "Oil Filter",
-                "Qty": 2,
-                "Unit_Price": 850.0,
-                "Total": 1700.0,
+                "Date": "2026-11-21",
+                "Time": "09:50 AM",
+                "Customer": "Walk-in Cash",
+                "Item": "Dishwash Liquid 1L",
+                "Qty": 3,
+                "Unit_Price": 480.0,
+                "Total": 1440.0,
                 "Payment_Type": "Cash",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "10:25 AM",
+                "Customer": "Haji Tariq Mart",
+                "Item": "Cooking Oil 5L",
+                "Qty": 4,
+                "Unit_Price": 2650.0,
+                "Total": 10600.0,
+                "Payment_Type": "Udhaar",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "11:05 AM",
+                "Customer": "Ayesha Provision",
+                "Item": "Sugar 5kg",
+                "Qty": 6,
+                "Unit_Price": 920.0,
+                "Total": 5520.0,
+                "Payment_Type": "Cash",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "11:45 AM",
+                "Customer": "Usman General Store",
+                "Item": "Washing Powder 3kg",
+                "Qty": 4,
+                "Unit_Price": 1150.0,
+                "Total": 4600.0,
+                "Payment_Type": "Udhaar",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "12:30 PM",
+                "Customer": "Walk-in Cash",
+                "Item": "Mineral Water Crate",
+                "Qty": 5,
+                "Unit_Price": 840.0,
+                "Total": 4200.0,
+                "Payment_Type": "Cash",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "01:20 PM",
+                "Customer": "Faisal Traders",
+                "Item": "Biscuit Carton",
+                "Qty": 3,
+                "Unit_Price": 1400.0,
+                "Total": 4200.0,
+                "Payment_Type": "Udhaar",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "02:10 PM",
+                "Customer": "Ayesha Provision",
+                "Item": "Shampoo Bottle",
+                "Qty": 4,
+                "Unit_Price": 790.0,
+                "Total": 3160.0,
+                "Payment_Type": "Cash",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "02:55 PM",
+                "Customer": "Haji Tariq Mart",
+                "Item": "Tissue Box Pack",
+                "Qty": 6,
+                "Unit_Price": 650.0,
+                "Total": 3900.0,
+                "Payment_Type": "Udhaar",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "03:40 PM",
+                "Customer": "Walk-in Cash",
+                "Item": "Basmati Rice 5kg",
+                "Qty": 3,
+                "Unit_Price": 1850.0,
+                "Total": 5550.0,
+                "Payment_Type": "Cash",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "04:20 PM",
+                "Customer": "Sana Departmental",
+                "Item": "Cooking Oil 5L",
+                "Qty": 3,
+                "Unit_Price": 2650.0,
+                "Total": 7950.0,
+                "Payment_Type": "Udhaar",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "05:05 PM",
+                "Customer": "Faisal Traders",
+                "Item": "Sugar 5kg",
+                "Qty": 5,
+                "Unit_Price": 920.0,
+                "Total": 4600.0,
+                "Payment_Type": "Cash",
+            },
+            {
+                "Date": "2026-11-21",
+                "Time": "05:45 PM",
+                "Customer": "Sana Departmental",
+                "Item": "Biscuit Carton",
+                "Qty": 4,
+                "Unit_Price": 1400.0,
+                "Total": 5600.0,
+                "Payment_Type": "Udhaar",
             },
         ],
         "udhaar_ledger": [
             {
-                "Customer": "Kamran Traders",
-                "Udhaar_Amount": 3500.0,
+                "Customer": "Usman General Store",
+                "Udhaar_Amount": 13850.0,
                 "Status": "Pending",
-                "Note": "AC Gas Service",
+                "Note": "Rice & Washing Powder",
             },
             {
-                "Customer": "Tariq Workshop",
-                "Udhaar_Amount": 2500.0,
+                "Customer": "Haji Tariq Mart",
+                "Udhaar_Amount": 14500.0,
                 "Status": "Pending",
-                "Note": "Opening Balance",
+                "Note": "Cooking Oil & Tissue",
+            },
+            {
+                "Customer": "Faisal Traders",
+                "Udhaar_Amount": 4200.0,
+                "Status": "Pending",
+                "Note": "Biscuit Carton",
+            },
+            {
+                "Customer": "Sana Departmental",
+                "Udhaar_Amount": 13550.0,
+                "Status": "Pending",
+                "Note": "Oil & Biscuits",
             },
         ],
-        "recovered_total": 0.0,
+        "recovered_total": 4500.0,
     }
 
 
@@ -112,21 +238,24 @@ def save_data():
         "udhaar_ledger": st.session_state.udhaar_ledger,
         "recovered_total": st.session_state.recovered_total,
     }
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
+    try:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
 
 
 def load_data():
+    base = default_data()
     if os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
-            base = default_data()
-            base.update(data)
-            return base
+            if isinstance(data, dict) and data.get("transactions"):
+                base.update(data)
         except Exception:
-            return default_data()
-    return default_data()
+            return base
+    return base
 
 
 def init_state():
@@ -321,7 +450,7 @@ if nav_page == "Home":
         if payment_type == "Udhaar":
             add_udhaar_to_customer(clean_cust, line_total, note=item_choice)
         save_data()
-        st.success("Entry added and saved locally.")
+        st.success("Entry added and saved.")
         st.rerun()
 
     st.divider()
