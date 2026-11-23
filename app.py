@@ -6,36 +6,124 @@ import pandas as pd
 import streamlit as st
 
 st.set_page_config(
-    page_title="Smart Business & POS Dashboard",
-    page_icon="📊",
+    page_title="Business POS & Analytics",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 DATA_FILE = "pos_data.json"
 
+# Premium Dark Navy & Slate Grey Business Theme
 st.markdown(
     """
     <style>
+        .stApp {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
         .block-container {
             padding-top: 2.2rem;
-            padding-bottom: 2rem;
+            padding-bottom: 2.5rem;
+        }
+        [data-testid="stSidebar"] {
+            background-color: #0f172a;
+            border-right: 1px solid #1e293b;
+        }
+        [data-testid="stSidebar"] * {
+            color: #e2e8f0 !important;
+        }
+        [data-testid="stSidebar"] input,
+        [data-testid="stSidebar"] .stNumberInput input {
+            color: #0f172a !important;
+            background-color: #ffffff !important;
         }
         .store-title {
-            font-size: 1.85rem;
+            font-size: 1.9rem;
             font-weight: 700;
-            line-height: 1.3;
-            margin-top: 0.25rem;
-            margin-bottom: 0.6rem;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
             color: #0f172a;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-left: 6px solid #1e3a8a;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 14px;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
         div[data-testid="stMetric"] {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-top: 3px solid #1e3a8a;
+            padding: 14px 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+        }
+        div[data-testid="stMetric"] label {
+            color: #475569 !important;
+            font-weight: 600 !important;
+            font-size: 0.85rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+            color: #0f172a !important;
+            font-weight: 700 !important;
+            font-size: 1.55rem !important;
+        }
+        /* Clear, authoritative action buttons */
+        .stButton > button,
+        .stDownloadButton > button {
+            background-color: #1e3a8a !important;
+            color: #ffffff !important;
+            border: 1px solid #1e3a8a !important;
+            border-radius: 6px !important;
+            padding: 0.55rem 1.15rem !important;
+            font-weight: 600 !important;
+            font-size: 0.92rem !important;
+            letter-spacing: 0.01em;
+            transition: background-color 0.15s ease, border-color 0.15s ease;
+        }
+        .stButton > button:hover,
+        .stDownloadButton > button:hover {
+            background-color: #172554 !important;
+            border-color: #172554 !important;
+            color: #ffffff !important;
+        }
+        /* Horizontal radio navigation styled cleanly as tabs/pills */
+        div[role="radiogroup"] {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 6px 10px;
+            gap: 10px;
+        }
+        div[role="radiogroup"] label {
             background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 12px 14px;
-            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 6px 16px !important;
+            margin-right: 4px !important;
+            font-weight: 600 !important;
+            color: #1e293b !important;
+        }
+        div[role="radiogroup"] label:has(input:checked) {
+            background-color: #0f172a !important;
+            border-color: #0f172a !important;
+            color: #ffffff !important;
+        }
+        div[role="radiogroup"] label:has(input:checked) p {
+            color: #ffffff !important;
+        }
+        .section-heading {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 0.4rem;
+            margin-bottom: 0.6rem;
+            padding-bottom: 0.35rem;
+            border-bottom: 2px solid #cbd5e1;
         }
     </style>
     """,
@@ -319,31 +407,31 @@ def safe_clear_sales_only():
 
 init_state()
 
-# --- Sidebar: Store Name, Product Price & Safe Clear ---
+# --- Sidebar: Store Settings, Product Prices & Safe Clear ---
 with st.sidebar:
-    st.header("Shop Settings")
-    new_store_name = st.text_input("Store Name", value=st.session_state.store_name)
+    st.markdown("### Store Configuration")
+    new_store_name = st.text_input("Business Name", value=st.session_state.store_name)
     if new_store_name.strip() and new_store_name.strip() != st.session_state.store_name:
         st.session_state.store_name = new_store_name.strip()
         save_data()
 
     st.divider()
-    st.subheader("Add / Update Product Price")
-    prod_name = st.text_input("Product Name", placeholder="e.g. Brake Pad")
-    prod_price = st.number_input("Price (PKR)", min_value=0.0, step=50.0, value=500.0)
-    if st.button("Save Product", use_container_width=True):
+    st.markdown("### Product Pricing")
+    prod_name = st.text_input("Item Name", placeholder="e.g. Brake Pad")
+    prod_price = st.number_input("Rate (PKR)", min_value=0.0, step=50.0, value=500.0)
+    if st.button("Save Rate", use_container_width=True):
         if prod_name.strip():
             st.session_state.products[prod_name.strip()] = float(prod_price)
             save_data()
-            st.success(f"Saved {prod_name.strip()} ({prod_price:,.0f} PKR)")
+            st.success(f"Saved {prod_name.strip()} at {prod_price:,.0f} PKR")
         else:
-            st.warning("Please enter a product name.")
+            st.warning("Enter an item name first.")
 
     st.divider()
-    st.subheader("Safe Reset")
-    if st.button("Safe Clear Sales (Keep Udhaar)", use_container_width=True):
+    st.markdown("### Safe Reset")
+    if st.button("Safe Clear Sales", use_container_width=True):
         safe_clear_sales_only()
-        st.success("Sales cleared safely. Udhaar ledger preserved.")
+        st.success("Sales reset. Udhaar ledger remains intact.")
 
 # --- Clean Full Header ---
 st.markdown(
@@ -370,7 +458,7 @@ if not df_udhaar.empty and "Customer" in df_udhaar.columns:
     cust_names.update(df_udhaar["Customer"].dropna().unique().tolist())
 all_customers.extend(sorted(cust_names))
 
-selected_customer = st.selectbox("Filter by Customer", options=all_customers)
+selected_customer = st.selectbox("Customer Filter", options=all_customers)
 
 if not df_tx.empty and selected_customer != "All Customers":
     filtered_tx = df_tx[df_tx["Customer"] == selected_customer].copy()
@@ -399,39 +487,30 @@ total_udhaar_due = (
 items_sold = int(filtered_tx["Qty"].sum()) if not filtered_tx.empty else 0
 recovered_cash = float(st.session_state.recovered_total)
 
-st.divider()
-
-# ==================== PAGE 1: HOME ====================
+# ==================== PAGE 1: HOME (POS Entry First, Recovery Below) ====================
 if nav_page == "Home":
-    c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Total Sales", f"{total_sales:,.0f}")
-    c2.metric("Cash Sales", f"{cash_sales:,.0f}")
-    c3.metric("Udhaar Recovered", f"{recovered_cash:,.0f}")
-    c4.metric("Pending Udhaar", f"{total_udhaar_due:,.0f}")
-    c5.metric("Items Sold", f"{items_sold}")
-
-    st.subheader("New Sale / POS Entry")
+    st.markdown('<div class="section-heading">New Sale Entry</div>', unsafe_allow_html=True)
     col_a, col_b, col_c = st.columns(3)
 
     with col_a:
         customer_input = st.text_input("Customer Name", value="Walk-in Cash")
         item_choice = st.selectbox(
-            "Select Product", options=list(st.session_state.products.keys())
+            "Product", options=list(st.session_state.products.keys())
         )
 
     with col_b:
         default_price = float(st.session_state.products.get(item_choice, 0.0))
         unit_price = st.number_input(
-            "Unit Price", min_value=0.0, value=default_price, step=50.0
+            "Unit Price (PKR)", min_value=0.0, value=default_price, step=50.0
         )
         qty = st.number_input("Quantity", min_value=1, value=1, step=1)
 
     with col_c:
         payment_type = st.selectbox("Payment Mode", options=["Cash", "Udhaar"])
         line_total = float(unit_price) * int(qty)
-        st.metric("Entry Total", f"{line_total:,.0f}")
+        st.metric("Bill Total (PKR)", f"{line_total:,.0f}")
 
-    if st.button("Add Entry", type="primary"):
+    if st.button("Add Sale Entry"):
         now = datetime.now()
         clean_cust = (
             customer_input.strip() if customer_input.strip() else "Walk-in Cash"
@@ -450,11 +529,10 @@ if nav_page == "Home":
         if payment_type == "Udhaar":
             add_udhaar_to_customer(clean_cust, line_total, note=item_choice)
         save_data()
-        st.success("Entry added and saved.")
+        st.success("Sale entry recorded.")
         st.rerun()
 
-    st.divider()
-    st.subheader("Udhaar Recovery (Receive Payment)")
+    st.markdown('<div class="section-heading">Udhaar Recovery</div>', unsafe_allow_html=True)
     pending_rows = [
         r for r in st.session_state.udhaar_ledger if float(r["Udhaar_Amount"]) > 0
     ]
@@ -462,7 +540,7 @@ if nav_page == "Home":
         r_col1, r_col2, r_col3 = st.columns(3)
         with r_col1:
             rec_cust = st.selectbox(
-                "Select Udhaar Customer",
+                "Customer Account",
                 options=[r["Customer"] for r in pending_rows],
             )
         current_bal = next(
@@ -471,17 +549,17 @@ if nav_page == "Home":
             if r["Customer"] == rec_cust
         )
         with r_col2:
-            st.metric("Pending Balance", f"{current_bal:,.0f}")
+            st.metric("Pending Balance (PKR)", f"{current_bal:,.0f}")
         with r_col3:
             rec_amt = st.number_input(
-                "Amount Received",
+                "Received Amount (PKR)",
                 min_value=0.0,
                 max_value=current_bal,
                 value=min(500.0, current_bal),
                 step=50.0,
             )
 
-        if st.button("Record Udhaar Payment"):
+        if st.button("Record Payment"):
             ok, msg = recover_udhaar(rec_cust, rec_amt)
             if ok:
                 st.success(msg)
@@ -489,98 +567,22 @@ if nav_page == "Home":
             else:
                 st.error(msg)
     else:
-        st.info("No pending udhaar balances right now.")
+        st.info("No pending udhaar accounts.")
 
-# ==================== PAGE 2: DASHBOARD ====================
+# ==================== PAGE 2: DASHBOARD (Dedicated Analytics & Charts) ====================
 elif nav_page == "Dashboard":
-    k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Total Sales", f"{total_sales:,.0f}")
-    k2.metric("Cash Sales", f"{cash_sales:,.0f}")
-    k3.metric("Udhaar Sales", f"{udhaar_sales:,.0f}")
-    k4.metric("Pending Udhaar", f"{total_udhaar_due:,.0f}")
+    tx_count = len(filtered_tx)
+    avg_ticket = (total_sales / tx_count) if tx_count > 0 else 0.0
+    cash_share = ((cash_sales / total_sales) * 100) if total_sales > 0 else 0.0
+    udhaar_share = ((udhaar_sales / total_sales) * 100) if total_sales > 0 else 0.0
+
+    st.markdown('<div class="section-heading">Performance Analytics</div>', unsafe_allow_html=True)
+    d1, d2, d3, d4 = st.columns(4)
+    d1.metric("Transactions Count", f"{tx_count}")
+    d2.metric("Average Ticket (PKR)", f"{avg_ticket:,.0f}")
+    d3.metric("Cash Share", f"{cash_share:.1f}%")
+    d4.metric("Udhaar Share", f"{udhaar_share:.1f}%")
 
     if not filtered_tx.empty:
         chart_df = filtered_tx.copy()
-        chart_df["Step"] = range(1, len(chart_df) + 1)
-        chart_df["Cumulative_Amount"] = chart_df["Total"].cumsum()
-
-        st.subheader("Stepwise Amount Movement (Live Update)")
-        step_chart = (
-            alt.Chart(chart_df)
-            .mark_line(point=True, strokeWidth=3)
-            .encode(
-                x=alt.X("Step:O", title="Entry Step"),
-                y=alt.Y("Cumulative_Amount:Q", title="Cumulative Amount"),
-                color=alt.Color("Payment_Type:N", title="Type"),
-                tooltip=[
-                    "Step",
-                    "Customer",
-                    "Item",
-                    "Total",
-                    "Payment_Type",
-                    "Cumulative_Amount",
-                ],
-            )
-            .properties(height=300)
-            .interactive()
-        )
-        st.altair_chart(step_chart, use_container_width=True)
-
-        st.subheader("Cash vs Udhaar Breakdown")
-        mode_df = filtered_tx.groupby("Payment_Type", as_index=False)["Total"].sum()
-        bar_chart = (
-            alt.Chart(mode_df)
-            .mark_bar(cornerRadiusTopLeft=6, cornerRadiusTopRight=6)
-            .encode(
-                x=alt.X("Payment_Type:N", title="Payment Type"),
-                y=alt.Y("Total:Q", title="Amount"),
-                color=alt.Color("Payment_Type:N", legend=None),
-                tooltip=["Payment_Type", "Total"],
-            )
-            .properties(height=280)
-        )
-        st.altair_chart(bar_chart, use_container_width=True)
-    else:
-        st.info("No transactions available for the selected filter.")
-
-# ==================== PAGE 3: LIST ====================
-elif nav_page == "List":
-    st.subheader("Transactions List (Cash & Udhaar)")
-    if not filtered_tx.empty:
-        st.dataframe(filtered_tx, use_container_width=True, hide_index=True)
-
-        if len(st.session_state.transactions) > 0:
-            del_idx = st.selectbox(
-                "Select Row Index to Delete",
-                options=list(range(len(st.session_state.transactions))),
-                format_func=lambda i: f"#{i+1} - {st.session_state.transactions[i]['Customer']} ({st.session_state.transactions[i]['Item']} - {st.session_state.transactions[i]['Total']:,.0f})",
-            )
-            if st.button("Delete Selected Transaction"):
-                st.session_state.transactions.pop(del_idx)
-                save_data()
-                st.success("Transaction deleted.")
-                st.rerun()
-
-        csv_data = filtered_tx.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            label="Download Transactions CSV",
-            data=csv_data,
-            file_name="transactions_list.csv",
-            mime="text/csv",
-        )
-    else:
-        st.info("No transaction records to display.")
-
-    st.divider()
-    st.subheader("Udhaar / Credit Khata List")
-    if not filtered_udhaar.empty:
-        st.dataframe(filtered_udhaar, use_container_width=True, hide_index=True)
-    else:
-        st.info("No udhaar records for the selected filter.")
-
-    st.divider()
-    st.subheader("Products & Price List")
-    prod_df = pd.DataFrame(
-        [{"Product": k, "Price": v} for k, v in st.session_state.products.items()]
-    )
-    st.dataframe(prod_df, use_container_width=True, hide_index=True)
+     
