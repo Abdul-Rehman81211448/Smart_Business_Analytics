@@ -12,7 +12,6 @@ st.set_page_config(
 
 DATA_FILE = "pos_data.json"
 
-# Premium Dark Navy & Slate Grey Business Theme
 st.markdown(
     """
     <style>
@@ -81,7 +80,6 @@ st.markdown(
             font-weight: 600 !important;
             font-size: 0.92rem !important;
             letter-spacing: 0.01em;
-            transition: background-color 0.15s ease, border-color 0.15s ease;
         }
         .stButton > button:hover,
         .stDownloadButton > button:hover {
@@ -404,7 +402,6 @@ def safe_clear_sales_only():
 
 init_state()
 
-# --- Sidebar: Store Settings, Product Prices & Safe Clear ---
 with st.sidebar:
     st.markdown("### Store Configuration")
     new_store_name = st.text_input("Business Name", value=st.session_state.store_name)
@@ -416,7 +413,7 @@ with st.sidebar:
     st.markdown("### Product Pricing")
     prod_name = st.text_input("Item Name", placeholder="e.g. Brake Pad")
     prod_price = st.number_input("Rate (PKR)", min_value=0.0, step=50.0, value=500.0)
-    if st.button("Save Rate", width="stretch"):
+    if st.button("Save Rate", use_container_width=True):
         if prod_name.strip():
             st.session_state.products[prod_name.strip()] = float(prod_price)
             save_data()
@@ -426,17 +423,15 @@ with st.sidebar:
 
     st.divider()
     st.markdown("### Safe Reset")
-    if st.button("Safe Clear Sales", width="stretch"):
+    if st.button("Safe Clear Sales", use_container_width=True):
         safe_clear_sales_only()
         st.success("Sales reset. Udhaar ledger remains intact.")
 
-# --- Clean Full Header ---
 st.markdown(
     f'<div class="store-title">{st.session_state.store_name}</div>',
     unsafe_allow_html=True,
 )
 
-# --- Top Horizontal Navigation ---
 nav_page = st.radio(
     "Navigation",
     options=["Home", "Dashboard", "List"],
@@ -482,7 +477,6 @@ total_udhaar_due = (
     float(filtered_udhaar["Udhaar_Amount"].sum()) if not filtered_udhaar.empty else 0.0
 )
 
-# ==================== PAGE 1: HOME ====================
 if nav_page == "Home":
     st.markdown('<div class="section-heading">New Sale Entry</div>', unsafe_allow_html=True)
     col_a, col_b, col_c = st.columns(3)
@@ -564,7 +558,6 @@ if nav_page == "Home":
     else:
         st.info("No pending udhaar accounts.")
 
-# ==================== PAGE 2: DASHBOARD ====================
 elif nav_page == "Dashboard":
     tx_count = len(filtered_tx)
     avg_ticket = (total_sales / tx_count) if tx_count > 0 else 0.0
@@ -585,4 +578,51 @@ elif nav_page == "Dashboard":
         chart_df["Cumulative Revenue (PKR)"] = chart_df["Total"].cumsum()
 
         st.markdown('<div class="section-heading">Cumulative Revenue Progression</div>', unsafe_allow_html=True)
-        line
+        line_data = chart_df.set_index("Entry")[["Cumulative Revenue (PKR)"]]
+        st.line_chart(line_data, height=300, use_container_width=True)
+
+        st.markdown('<div class="section-heading">Payment Mode Comparison</div>', unsafe_allow_html=True)
+        mode_series = chart_df.groupby("Payment_Type")["Total"].sum()
+        bar_data = pd.DataFrame({"Amount (PKR)": mode_series})
+        st.bar_chart(bar_data, height=280, use_container_width=True)
+    else:
+        st.info("No transaction records available for this filter.")
+
+elif nav_page == "List":
+    st.markdown('<div class="section-heading">Transactions Ledger</div>', unsafe_allow_html=True)
+    if not filtered_tx.empty:
+        st.dataframe(filtered_tx, use_container_width=True, hide_index=True)
+
+        if len(st.session_state.transactions) > 0:
+            del_idx = st.selectbox(
+                "Select Entry to Remove",
+                options=list(range(len(st.session_state.transactions))),
+                format_func=lambda i: f"#{i+1} - {st.session_state.transactions[i]['Customer']} ({st.session_state.transactions[i]['Item']} - {st.session_state.transactions[i]['Total']:,.0f})",
+            )
+            if st.button("Delete Entry"):
+                st.session_state.transactions.pop(del_idx)
+                save_data()
+                st.success("Entry removed.")
+                st.rerun()
+
+        csv_data = filtered_tx.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="Export CSV",
+            data=csv_data,
+            file_name="transactions_ledger.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info("No transactions to show.")
+
+    st.markdown('<div class="section-heading">Udhaar Khata</div>', unsafe_allow_html=True)
+    if not filtered_udhaar.empty:
+        st.dataframe(filtered_udhaar, use_container_width=True, hide_index=True)
+    else:
+        st.info("No udhaar records for this filter.")
+
+    st.markdown('<div class="section-heading">Product Rate List</div>', unsafe_allow_html=True)
+    prod_df = pd.DataFrame(
+        [{"Product": k, "Rate (PKR)": v} for k, v in st.session_state.products.items()]
+    )
+    st.dataframe(prod_df, use_container_width=True, hide_index=True)
