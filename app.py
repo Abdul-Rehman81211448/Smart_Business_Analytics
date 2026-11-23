@@ -1,7 +1,6 @@
 import json
 import os
 from datetime import datetime
-import altair as alt
 import pandas as pd
 import streamlit as st
 
@@ -72,7 +71,6 @@ st.markdown(
             font-weight: 700 !important;
             font-size: 1.55rem !important;
         }
-        /* Clear, authoritative action buttons */
         .stButton > button,
         .stDownloadButton > button {
             background-color: #1e3a8a !important;
@@ -91,7 +89,6 @@ st.markdown(
             border-color: #172554 !important;
             color: #ffffff !important;
         }
-        /* Horizontal radio navigation styled cleanly as tabs/pills */
         div[role="radiogroup"] {
             background-color: #ffffff;
             border: 1px solid #cbd5e1;
@@ -419,7 +416,7 @@ with st.sidebar:
     st.markdown("### Product Pricing")
     prod_name = st.text_input("Item Name", placeholder="e.g. Brake Pad")
     prod_price = st.number_input("Rate (PKR)", min_value=0.0, step=50.0, value=500.0)
-    if st.button("Save Rate", use_container_width=True):
+    if st.button("Save Rate", width="stretch"):
         if prod_name.strip():
             st.session_state.products[prod_name.strip()] = float(prod_price)
             save_data()
@@ -429,7 +426,7 @@ with st.sidebar:
 
     st.divider()
     st.markdown("### Safe Reset")
-    if st.button("Safe Clear Sales", use_container_width=True):
+    if st.button("Safe Clear Sales", width="stretch"):
         safe_clear_sales_only()
         st.success("Sales reset. Udhaar ledger remains intact.")
 
@@ -484,10 +481,8 @@ udhaar_sales = (
 total_udhaar_due = (
     float(filtered_udhaar["Udhaar_Amount"].sum()) if not filtered_udhaar.empty else 0.0
 )
-items_sold = int(filtered_tx["Qty"].sum()) if not filtered_tx.empty else 0
-recovered_cash = float(st.session_state.recovered_total)
 
-# ==================== PAGE 1: HOME (POS Entry First, Recovery Below) ====================
+# ==================== PAGE 1: HOME ====================
 if nav_page == "Home":
     st.markdown('<div class="section-heading">New Sale Entry</div>', unsafe_allow_html=True)
     col_a, col_b, col_c = st.columns(3)
@@ -569,7 +564,7 @@ if nav_page == "Home":
     else:
         st.info("No pending udhaar accounts.")
 
-# ==================== PAGE 2: DASHBOARD (Dedicated Analytics & Charts) ====================
+# ==================== PAGE 2: DASHBOARD ====================
 elif nav_page == "Dashboard":
     tx_count = len(filtered_tx)
     avg_ticket = (total_sales / tx_count) if tx_count > 0 else 0.0
@@ -585,4 +580,9 @@ elif nav_page == "Dashboard":
 
     if not filtered_tx.empty:
         chart_df = filtered_tx.copy()
-     
+        chart_df["Total"] = pd.to_numeric(chart_df["Total"], errors="coerce").fillna(0.0)
+        chart_df["Entry"] = [f"#{i + 1}" for i in range(len(chart_df))]
+        chart_df["Cumulative Revenue (PKR)"] = chart_df["Total"].cumsum()
+
+        st.markdown('<div class="section-heading">Cumulative Revenue Progression</div>', unsafe_allow_html=True)
+        line
